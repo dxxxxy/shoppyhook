@@ -1,5 +1,7 @@
 # shoppyhook
-A really simple and lightweight shoppy webhook middleware for express. It will only let webhook requests pass that have a valid signature, meaning that faking purchase webhooks is not possible (provided that you do not leak your secret). The body will then be available as a JSON object in `req.body`.
+A really simple and lightweight shoppy webhook middleware for express. 
+
+It will only let webhook requests pass that have a valid signature, meaning that faking purchase webhooks is not possible (provided that you do not leak your secret). The body will then be available as a JSON object in `req.body`.
 
 ## Install
 ```
@@ -10,17 +12,19 @@ npm i shoppyhook
 ```js
 const shoppyhook = require("shoppyhook")
 
-//single route
-app.use("/v1/shoppy/endpoint", shoppyhook("your secret"))
-
-//all routes
-app.use(shoppyhook("your secret"))
+app.use("/your/shoppy/endpoint", shoppyhook("secret"))
 ```
 
-## Parser problems
-You need to disable any parser for the webhook route, otherwise it will not work (requires raw unparsed body).
+### Parser issues
+You need to disable any parser you have enabled for the webhook route, otherwise it will not work as it requires the raw unparsed body.
+
+Example: Using json as a global parser through `app.use(express.json())`, I can simply replace it with this workaround, which applies it globally except for that specific shoppy webhook route.
 ```js
-//use this instead of just app.use(express.json())
-app.use((req, res, next) => req.path != "/v1/shoppy/endpoint" ? express.json(req, res, next) : next())
-//or just dont use json parser at all if youre using it on all the routes
+app.use(req, res, next => req.path != "/your/shoppy/endpoint" ? express.json(req, res, next) : next())
 ```
+
+## Disclaimer
+This is for educational purposes only. I am not responsible for any damage caused by this tool.
+
+## License
+GPLv3 © dxxxxy
