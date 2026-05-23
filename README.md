@@ -1,4 +1,6 @@
 # shoppyhook
+> Superseded by dxxxxy/hmacverify
+
 A really simple and lightweight shoppy webhook middleware for express. 
 
 It will only let webhook requests pass that have a valid signature, meaning that faking purchase webhooks is not possible (provided that you do not leak your secret). The body will then be available as a JSON object in `req.body`.
